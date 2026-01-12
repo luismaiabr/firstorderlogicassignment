@@ -3,14 +3,22 @@
  */
 
 import { artifactFiles } from '../config.js';
-import { getArtifactContents } from '../artifacts-data.js';
 
 // Store artifact contents for download
 let artifactContents = {};
 
-// Load artifact files
+// Load artifact files directly from artifacts folder
 async function loadArtifacts() {
-  artifactContents = getArtifactContents();
+  for (const file of artifactFiles) {
+    try {
+      const response = await fetch(`artifacts/${file.name}`);
+      if (response.ok) {
+        artifactContents[file.name] = await response.text();
+      }
+    } catch (error) {
+      console.error(`Erro ao carregar ${file.name}:`, error);
+    }
+  }
 }
 
 // Download a single file
@@ -49,16 +57,22 @@ export function renderPage6() {
         </p>
 
         <div class="file-list" id="file-list">
-          ${artifactFiles.map(file => `
-            <div class="file-item">
-              <div class="file-info">
+          ${artifactFiles.map((file, index) => `
+            <div class="file-item" data-file-index="${index}">
+              <div class="file-info" style="flex: 1; cursor: pointer;" data-file-expand="${index}">
                 <div class="file-icon">${file.extension}</div>
-                <div>
+                <div style="flex: 1;">
                   <div class="file-name">${file.name}</div>
                   <div class="file-size">${file.description}</div>
+                  <div class="file-detailed-description" id="file-desc-${index}" style="display: none; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.875rem; line-height: 1.5;">
+                    ${file.detailedDescription}
+                  </div>
                 </div>
+                <svg class="expand-icon" id="expand-icon-${index}" style="width: 1.25rem; height: 1.25rem; margin-left: 1rem; transition: transform 0.2s; color: var(--muted-foreground);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
               </div>
-              <button class="btn-download" data-file="${file.name}">
+              <button class="btn-download" data-file="${file.name}" style="margin-left: 1rem;">
                 <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                 </svg>
@@ -78,52 +92,7 @@ export function renderPage6() {
         </div>
       </div>
 
-      <div class="card">
-        <h2>Descrição dos Arquivos</h2>
-        <div class="space-y-3">
-          <div class="muted-box">
-            <h3 class="mb-2">axiom_generator.py</h3>
-            <p class="text-sm text-muted">
-              Script Python que converte representações de grafos em JSON para o formato TPTP compatível com o Vampire.
-            </p>
-          </div>
 
-          <div class="muted-box">
-            <h3 class="mb-2">dfs.py</h3>
-            <p class="text-sm text-muted">
-              Implementação do algoritmo de Busca em Profundidade (DFS) para detecção de ciclos em grafos.
-            </p>
-          </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">graph_problem.p</h3>
-            <p class="text-sm text-muted">
-              Arquivo de problema no formato TPTP pronto para ser processado pelo provador de teoremas Vampire.
-            </p>
-          </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">nodes.json</h3>
-            <p class="text-sm text-muted">
-              Representação JSON do grafo de exemplo com nós e lista de adjacência.
-            </p>
-          </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">solution.tptp</h3>
-            <p class="text-sm text-muted">
-              Arquivo de solução TPTP gerado pelo provador de teoremas.
-            </p>
-          </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">README.md</h3>
-            <p class="text-sm text-muted">
-              Relatório de análise do grafo com detalhes sobre ciclos detectados, componentes conectados e estatísticas.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   `;
 }
@@ -132,10 +101,27 @@ export async function initPage6() {
   // Load artifacts first
   await loadArtifacts();
   
+  // Set up expand/collapse for file descriptions
+  const expandBtns = document.querySelectorAll('[data-file-expand]');
+  expandBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const index = btn.dataset.fileExpand;
+      const description = document.getElementById(`file-desc-${index}`);
+      const icon = document.getElementById(`expand-icon-${index}`);
+      
+      if (description && icon) {
+        const isExpanded = description.style.display !== 'none';
+        description.style.display = isExpanded ? 'none' : 'block';
+        icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
+      }
+    });
+  });
+  
   // Set up individual download buttons
   const downloadBtns = document.querySelectorAll('.btn-download[data-file]');
   downloadBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent expanding when clicking download
       const filename = btn.dataset.file;
       const content = artifactContents[filename];
       if (content) {
