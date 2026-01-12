@@ -1,7 +1,5 @@
 # Graph Analysis Report
 
-**Date:** 1768216567.4881628
-
 **Graph Size:** 15 nodes, 18 edges
 
 ---
