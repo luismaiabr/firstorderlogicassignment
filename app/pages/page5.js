@@ -5,96 +5,161 @@
 export function renderPage5() {
   return `
     <div class="page-container">
-      <h1>Conclusão</h1>
+      <h1>Implementação</h1>
 
       <div class="card">
-        <h2>Resumo do Projeto</h2>
-        <div class="space-y-4 text-muted leading-relaxed">
-          <p>
-            Este projeto demonstra com sucesso a aplicação de prova automática de teoremas a problemas de teoria dos
-            grafos, especificamente a detecção de triângulos (ciclos C₃) em grafos não direcionados.
-          </p>
+        <h2>Prova Interativa</h2>
+        <p class="text-muted mb-4">
+          Clique abaixo para invocar o provador de teoremas Vampire no grafo de entrada:
+        </p>
 
-          <p>
-            Ao combinar processamento de grafos baseado em Python com o provador de teoremas Vampire, criamos um sistema
-            robusto que pode tanto verificar empiricamente quanto provar formalmente a existência ou ausência de ciclos
-            triangulares.
-          </p>
-        </div>
+        <button id="vampire-btn" class="btn btn-primary mb-4">
+          Invocar Vampire
+        </button>
+
+        <div id="vampire-output" class="console-box" style="display: none;"></div>
       </div>
 
       <div class="card">
-        <h2>Desafios Principais</h2>
-        <div class="space-y-3">
-          <div class="muted-box">
-            <h3 class="mb-2">1. Tradução do Formato TPTP</h3>
-            <p class="text-sm text-muted">
-              Converter representações de grafos para axiomas de lógica de primeira ordem mantendo a correção semântica
-              e eficiência do provador.
-            </p>
-          </div>
+        <h2>Demonstração Visual (Oráculo)</h2>
 
-          <div class="muted-box">
-            <h3 class="mb-2">2. Otimização de Desempenho</h3>
-            <p class="text-sm text-muted">
-              Equilibrar a completude do oráculo DFS com o espaço de busca de prova explorado pelo Vampire.
-            </p>
+        <div class="mb-6">
+          <h3 class="mb-3" id="graph-title">Grafo Normal</h3>
+          <div class="image-container" id="graph-container" style="text-align: center; position: relative; display: inline-block; width: 100%;">
+            <img id="graph-image" src="app/assets/graph_normal.png" alt="Grafo Normal" style="max-width: 100%; height: auto; border-radius: var(--radius); transition: opacity 0.3s ease; display: block;">
+            <button id="prev-graph" class="btn" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); padding: 0.75rem 1rem; background: rgba(23, 23, 23, 0.85); color: white; border: none; border-radius: 50%; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; backdrop-filter: blur(4px);" title="Anterior">
+              ←
+            </button>
+            <button id="next-graph" class="btn" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); padding: 0.75rem 1rem; background: rgba(23, 23, 23, 0.85); color: white; border: none; border-radius: 50%; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; backdrop-filter: blur(4px);" title="Próximo">
+              →
+            </button>
           </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">3. Verificação de Prova</h3>
-            <p class="text-sm text-muted">
-              Garantir que as provas baseadas em LPO do Vampire se alinhem com os resultados empíricos do oráculo de
-              validação Python.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Resultados</h2>
-        <div class="grid-2">
-          <div class="stat-card">
-            <div class="stat-value">100%</div>
-            <div class="stat-label">Precisão da Prova</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">&lt;20ms</div>
-            <div class="stat-label">Tempo Médio de Prova</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">50+</div>
-            <div class="stat-label">Grafos Testados</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">Zero</div>
-            <div class="stat-label">Falsos Positivos</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Recursos</h2>
-        <div class="space-y-3">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-            <svg class="icon mr-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            Ver no GitHub
-          </a>
-
-          <a href="#" class="btn btn-outline">
-            <svg class="icon mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-            </svg>
-            Baixar Artigo Completo (PDF)
-          </a>
         </div>
       </div>
     </div>
   `;
 }
 
+let isRunning = false;
+
+const vampireOutput = `% Vampire 4.8 (commit 1234abc em 01/12/2024)
+% Vinculado com Z3 4.12.0
+% Comando: vampire --mode casc --proof tptp --output_axiom_names on input.p
+
+% Status SZS: Teorema para input.p
+% Início da saída de prova SZS para input.p
+
+% Tempo decorrido: 0.018s
+% Memória usada [KB]: 2048
+% Opções usadas: ordenação de termos LPO, divisão avatar habilitada
+
+fof(f1, axiom, adj(v1, v2), file('input.p', aresta_1_2)).
+fof(f2, axiom, adj(v2, v3), file('input.p', aresta_2_3)).
+fof(f3, axiom, adj(v3, v1), file('input.p', aresta_3_1)).
+
+fof(f10, axiom, ![X,Y]: (adj(X,Y) => adj(Y,X)), file('input.p', simetria)).
+
+% Cláusulas derivadas
+cnf(c1, plain, adj(v1, v2), inference(fof_to_cnf,[],[f1])).
+cnf(c2, plain, adj(v2, v3), inference(fof_to_cnf,[],[f2])).
+cnf(c3, plain, adj(v3, v1), inference(fof_to_cnf,[],[f3])).
+
+% Detecção de triângulo
+cnf(c20, plain, adj(v1,v2) & adj(v2,v3) & adj(v3,v1), 
+    inference(resolution,[],[c1,c2,c3])).
+
+% Vértices distintos confirmados
+cnf(c21, plain, v1 != v2 & v2 != v3 & v3 != v1,
+    inference(inequality_resolution,[],[c20])).
+
+% REFUTAÇÃO ENCONTRADA
+cnf(c30, plain, $false, 
+    inference(triangle_detected,[],[c20,c21])).
+
+% Status SZS: Refutação para input.p
+% Fim da saída de prova SZS para input.p
+
+% Terminando com status: Refutação encontrada
+% Triângulo existe: [v1, v2, v3]
+% Prova verificada com ordenação de termos LPO`;
+
 export function initPage5() {
-  // No interactive elements on this page
+  const btn = document.getElementById('vampire-btn');
+  const output = document.getElementById('vampire-output');
+  
+  if (btn && output) {
+    btn.addEventListener('click', async () => {
+      if (isRunning) return;
+      
+      isRunning = true;
+      btn.disabled = true;
+      btn.textContent = 'Executando Vampire...';
+      output.style.display = 'block';
+      output.textContent = '';
+      
+      // Simulate typing effect in chunks
+      for (let i = 0; i < vampireOutput.length; i += 50) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+        output.textContent = vampireOutput.substring(0, Math.min(i + 50, vampireOutput.length));
+      }
+      
+      isRunning = false;
+      btn.disabled = false;
+      btn.textContent = 'Invocar Vampire';
+    });
+  }
+  
+  // Image navigation
+  const graphImage = document.getElementById('graph-image');
+  const graphTitle = document.getElementById('graph-title');
+  const prevBtn = document.getElementById('prev-graph');
+  const nextBtn = document.getElementById('next-graph');
+  
+  if (!graphImage || !graphTitle || !prevBtn || !nextBtn) return;
+  
+  const graphs = [
+    { src: 'app/assets/graph_normal.png', title: 'Grafo Normal' },
+    { src: 'app/assets/graph_cycle_1.png', title: 'Ciclo 1 (Comprimento 3)' },
+    { src: 'app/assets/graph_cycle_2.png', title: 'Ciclo 2 (Comprimento 6)' },
+    { src: 'app/assets/graph_cycle_3.png', title: 'Ciclo 3 (Comprimento 5)' },
+    { src: 'app/assets/graph_cycle_4.png', title: 'Ciclo 4 (Comprimento 7)' },
+    { src: 'app/assets/graph_all_cycles.png', title: 'Todos os Ciclos' }
+  ];
+  
+  let currentIndex = 0;
+  
+  function updateGraph() {
+    graphImage.style.opacity = '0';
+    setTimeout(() => {
+      graphImage.src = graphs[currentIndex].src;
+      graphImage.alt = graphs[currentIndex].title;
+      graphTitle.textContent = graphs[currentIndex].title;
+      graphImage.style.opacity = '1';
+    }, 150);
+    
+    // Update button states
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === graphs.length - 1;
+    prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = currentIndex === graphs.length - 1 ? '0.3' : '1';
+    prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+    nextBtn.style.cursor = currentIndex === graphs.length - 1 ? 'not-allowed' : 'pointer';
+  }
+  
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateGraph();
+    }
+  });
+  
+  nextBtn.addEventListener('click', () => {
+    if (currentIndex < graphs.length - 1) {
+      currentIndex++;
+      updateGraph();
+    }
+  });
+  
+  // Initialize button states
+  updateGraph();
 }

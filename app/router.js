@@ -5,7 +5,8 @@ import {
   renderPage3, initPage3,
   renderPage4, initPage4,
   renderPage5, initPage5,
-  renderPage6, initPage6
+  renderPage6, initPage6,
+  renderPage7, initPage7
 } from './pages/index.js';
 
 /**
@@ -20,6 +21,7 @@ class Router {
       '/4': { render: renderPage4, init: initPage4 },
       '/5': { render: renderPage5, init: initPage5 },
       '/6': { render: renderPage6, init: initPage6 },
+      '/7': { render: renderPage7, init: initPage7 },
     };
     
     this.mainContent = null;
@@ -49,6 +51,17 @@ class Router {
     
     // Update navigation links
     renderNavLinks(route);
+    
+    // Render KaTeX math expressions
+    if (window.renderMathInElement) {
+      renderMathInElement(this.mainContent, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+    }
     
     // Initialize page-specific functionality
     if (routeConfig.init) {

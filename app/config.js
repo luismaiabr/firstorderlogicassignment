@@ -3,9 +3,10 @@ export const sections = [
   { number: 1, title: "Base Teórica", route: "/" },
   { number: 2, title: "Gerador de Axiomas", route: "/2" },
   { number: 3, title: "Engenharia e Validação", route: "/3" },
-  { number: 4, title: "Implementação Vampire", route: "/4" },
-  { number: 5, title: "Considerações Finais", route: "/5" },
-  { number: 6, title: "Artefatos", route: "/6" },
+  { number: 4, title: "Prova Automatizada (LPO)", route: "/4" },
+  { number: 5, title: "Implementação", route: "/5" },
+  { number: 6, title: "Conclusão", route: "/6" },
+  { number: 7, title: "Artefatos", route: "/7" },
 ];
 
 // Artifacts files data
