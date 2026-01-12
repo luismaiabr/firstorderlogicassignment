@@ -104,9 +104,12 @@ def dfs(input_data: DFSInput) -> DFSOutput:
     )
 if __name__ == "__main__":
     import json
-    #lets load nodes.json
+    #lets load results.json
     with open("nodes.json", "r") as f:
         data = json.load(f)
     dfs_input = DFSInput(**data)
     dfs_output = dfs(dfs_input)
+    #lets save the results to results.json
+    with open("results.json", "w") as f:
+        json.dump(dfs_output.dict(), f, indent=4)
     print(dfs_output)

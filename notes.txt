@@ -1,0 +1,3 @@
+Back-edges duplicadas: Como o grafo é não direcionado, se existe uma back-edge (u, v), eventualmente também será detectada (v, u) quando v for visitado. No entanto, no resultado atual isso não ocorre porque quando a aresta inversa é examinada, um dos nós já foi finalizado.
+
+A condição v not in finished_at é correta para não direcionados: Em grafos não direcionados, se v já foi descoberto mas não finalizado, e v não é o pai de u, então existe um ciclo. A verificação está correta.
