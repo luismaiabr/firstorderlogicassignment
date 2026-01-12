@@ -76,8 +76,8 @@ def dfs(input_data: DFSInput) -> DFSOutput:
             if v not in discovered_at:
                 parent[v] = u
                 dfs_visit(v)
-            elif v not in finished_at:
-                # A back-edge is found
+            elif v not in finished_at and v != parent.get(u):
+                # A back-edge is found (not the edge we came from)
                 has_cycle = True
                 back_edges.append((u, v))
 
