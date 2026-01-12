@@ -2,7 +2,7 @@
 
 **Date:** 1768216567.4881628
 
-**Graph Size:** 15 nodes, 36 edges
+**Graph Size:** 15 nodes, 18 edges
 
 ---
 
@@ -155,7 +155,7 @@
 ## 📈 Graph Statistics Summary
 
 - **Total Nodes:** 15
-- **Total Edges:** 36
+- **Total Edges:** 18
 - **Graph Density:** 0.1714
 - **Average Degree:** 4.80
 - **Has Cycles:** Yes ✅
