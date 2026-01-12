@@ -10,142 +10,44 @@
 
 **Cycles Detected:** ✅ YES
 
-**Number of Back Edges:** 18
+**Number of Back Edges:** 4
 
-**Number of Distinct Cycles:** 18
+**Number of Distinct Cycles:** 4
 
 ### Detailed Cycle Information
 
 #### Cycle #1
-- **Length:** 2 edges
-- **Path:** v03 → v01 → v01
-- **Back Edge:** (v01 → v01)
-- **Nodes in Cycle:** v01, v03
-
-#### Cycle #2
-- **Length:** 2 edges
-- **Path:** v08 → v03 → v03
-- **Back Edge:** (v03 → v03)
-- **Nodes in Cycle:** v03, v08
-
-#### Cycle #3
-- **Length:** 2 edges
-- **Path:** v07 → v11 → v11
-- **Back Edge:** (v11 → v11)
-- **Nodes in Cycle:** v07, v11
-
-#### Cycle #4
-- **Length:** 2 edges
-- **Path:** v11 → v08 → v08
-- **Back Edge:** (v08 → v08)
-- **Nodes in Cycle:** v08, v11
-
-#### Cycle #5
 - **Length:** 3 edges
 - **Path:** v12 → v08 → v03 → v03
 - **Back Edge:** (v03 → v03)
 - **Nodes in Cycle:** v03, v08, v12
 
-#### Cycle #6
-- **Length:** 2 edges
-- **Path:** v09 → v05 → v05
-- **Back Edge:** (v05 → v05)
-- **Nodes in Cycle:** v05, v09
-
-#### Cycle #7
-- **Length:** 2 edges
-- **Path:** v02 → v13 → v13
-- **Back Edge:** (v13 → v13)
-- **Nodes in Cycle:** v02, v13
-
-#### Cycle #8
-- **Length:** 2 edges
-- **Path:** v15 → v02 → v02
-- **Back Edge:** (v02 → v02)
-- **Nodes in Cycle:** v02, v15
-
-#### Cycle #9
+#### Cycle #2
 - **Length:** 6 edges
 - **Path:** v15 → v02 → v13 → v09 → v05 → v12 → v12
 - **Back Edge:** (v12 → v12)
 - **Nodes in Cycle:** v02, v05, v09, v12, v13, v15
 
-#### Cycle #10
-- **Length:** 2 edges
-- **Path:** v10 → v06 → v06
-- **Back Edge:** (v06 → v06)
-- **Nodes in Cycle:** v06, v10
-
-#### Cycle #11
-- **Length:** 2 edges
-- **Path:** v06 → v13 → v13
-- **Back Edge:** (v13 → v13)
-- **Nodes in Cycle:** v06, v13
-
-#### Cycle #12
-- **Length:** 2 edges
-- **Path:** v13 → v09 → v09
-- **Back Edge:** (v09 → v09)
-- **Nodes in Cycle:** v09, v13
-
-#### Cycle #13
-- **Length:** 2 edges
-- **Path:** v05 → v12 → v12
-- **Back Edge:** (v12 → v12)
-- **Nodes in Cycle:** v05, v12
-
-#### Cycle #14
+#### Cycle #3
 - **Length:** 5 edges
 - **Path:** v14 → v05 → v12 → v08 → v03 → v03
 - **Back Edge:** (v03 → v03)
 - **Nodes in Cycle:** v03, v05, v08, v12, v14
 
-#### Cycle #15
+#### Cycle #4
 - **Length:** 7 edges
 - **Path:** v04 → v14 → v05 → v12 → v08 → v03 → v01 → v01
 - **Back Edge:** (v01 → v01)
 - **Nodes in Cycle:** v01, v03, v04, v05, v08, v12, v14
 
-#### Cycle #16
-- **Length:** 2 edges
-- **Path:** v04 → v14 → v14
-- **Back Edge:** (v14 → v14)
-- **Nodes in Cycle:** v04, v14
-
-#### Cycle #17
-- **Length:** 2 edges
-- **Path:** v14 → v05 → v05
-- **Back Edge:** (v05 → v05)
-- **Nodes in Cycle:** v05, v14
-
-#### Cycle #18
-- **Length:** 2 edges
-- **Path:** v12 → v08 → v08
-- **Back Edge:** (v08 → v08)
-- **Nodes in Cycle:** v08, v12
-
 ### All Back Edges
 
 | From | To | Cycle Created |
 |------|-----|---------------|
-| v03 | v01 | Cycle #1 |
-| v08 | v03 | Cycle #2 |
-| v07 | v11 | Cycle #3 |
-| v11 | v08 | Cycle #4 |
-| v12 | v03 | Cycle #5 |
-| v09 | v05 | Cycle #6 |
-| v02 | v13 | Cycle #7 |
-| v15 | v02 | Cycle #8 |
-| v15 | v12 | Cycle #9 |
-| v10 | v06 | Cycle #10 |
-| v06 | v13 | Cycle #11 |
-| v13 | v09 | Cycle #12 |
-| v05 | v12 | Cycle #13 |
-| v14 | v03 | Cycle #14 |
-| v04 | v01 | Cycle #15 |
-| v04 | v14 | Cycle #16 |
-| v14 | v05 | Cycle #17 |
-| v12 | v08 | Cycle #18 |
+| v12 | v03 | Cycle #1 |
+| v15 | v12 | Cycle #2 |
+| v14 | v03 | Cycle #3 |
+| v04 | v01 | Cycle #4 |
 
 ---
 
@@ -257,7 +159,7 @@
 - **Graph Density:** 0.1714
 - **Average Degree:** 4.80
 - **Has Cycles:** Yes ✅
-- **Number of Cycles:** 18
+- **Number of Cycles:** 4
 - **Strongly Connected Components:** 1
 - **Weakly Connected:** Yes ✅
 
