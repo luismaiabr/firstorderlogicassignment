@@ -21,7 +21,7 @@
   // Fallback para desenvolvimento local
   const baseURL = new URLSearchParams(window.location.search).get('baseURL') 
     || localStorage.getItem('serverBaseURL')
-    || 'http://localhost:8000';
+    || 'https://ununique-ladawn-semifurnished.ngrok-free.dev/';
   
   window.__SERVER_CONFIG__ = {
     baseURL: baseURL
