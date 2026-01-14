@@ -3,7 +3,10 @@
 (async function() {
   try {
     // Busca configuração do endpoint serverless do Vercel
-    const response = await fetch('/api/config');
+    const headers = {
+      "ngrok-skip-browser-warning": "true"
+    };
+    const response = await fetch('/api/config', { headers: headers });
     if (response.ok) {
       const config = await response.json();
       window.__SERVER_CONFIG__ = {
