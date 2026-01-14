@@ -44,7 +44,10 @@ export function initPage5() {
       try {
         const baseURL = serverConfig.baseURL.replace(/\/$/, ''); // Remove trailing slash
         const solveURL = `${baseURL}${serverConfig.solveEndpoint}`;
-        const response = await fetch(solveURL);
+        const headers = {
+          "ngrok-skip-browser-warning": "true"
+        };
+        const response = await fetch(solveURL, { headers: headers });
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);

@@ -1,11 +1,11 @@
 {
-  "installCommand": "yum install -y wget && wget https://github.com/vprover/vampire/releases/latest/download/vampire_z3_rel_static_HEAD_6285 -O vampire && chmod +x vampire && npm install",
-  "buildCommand": "npm run build", 
+  "buildCommand": null,
   "outputDirectory": ".",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/((?!api).*)",
-      "destination": "/index.html"
+      "src": "/[^.]+",
+      "dest": "/",
+      "status": 200
     }
   ]
 }
