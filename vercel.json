@@ -1,11 +1,10 @@
 {
   "buildCommand": "echo 'Static site'",
   "outputDirectory": ".",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/[^.]+",
-      "dest": "/",
-      "status": 200
+      "source": "/((?!api).*)",
+      "destination": "/index.html"
     }
   ]
 }
