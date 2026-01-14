@@ -1,9 +1,23 @@
 // Runtime configuration loader
 // This script should be loaded BEFORE config.js in index.html
-(function() {
+(async function() {
+  try {
+    // Busca configuração do endpoint serverless do Vercel
+    const response = await fetch('/api/config');
+    if (response.ok) {
+      const config = await response.json();
+      window.__SERVER_CONFIG__ = {
+        baseURL: config.baseURL
+      };
+      return;
+    }
+  } catch (error) {
+    console.log('Usando configuração local');
+  }
+  
+  // Fallback para desenvolvimento local
   const baseURL = new URLSearchParams(window.location.search).get('baseURL') 
     || localStorage.getItem('serverBaseURL')
-    || window.__VERCEL_BASE_URL__
     || 'http://localhost:8000';
   
   window.__SERVER_CONFIG__ = {
