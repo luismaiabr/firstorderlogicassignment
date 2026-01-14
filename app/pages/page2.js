@@ -67,7 +67,8 @@ export function initPage2() {
     
     // Fetch the actual TPTP file content
     try {
-      const response = await fetch('/artifacts/graph_problem.p');
+      const baseUrl = window.__SERVER_CONFIG__?.baseURL || '';
+      const response = await fetch(`${baseUrl}/artifacts/graph_problem.p`);
       tptpCode = await response.text();
       
       // Display instantly

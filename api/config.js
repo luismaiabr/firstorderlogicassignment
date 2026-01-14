@@ -4,6 +4,6 @@ export default function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   
   res.status(200).json({
-    baseURL: process.env.BASE_URL || 'http://localhost:8000'
+    baseURL: process.env.VITE_BASE_URL || process.env.BASE_URL || ''
   });
 }
