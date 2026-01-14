@@ -3,30 +3,7 @@
  */
 
 let isGenerating = false;
-
-const tptpCode = `% Formato TPTP - Axiomas de Grafos Livres de C3
-% Gerado a partir de representação de grafo em JSON
-
-fof(aresta_1_2, axiom, adj(v1, v2)).
-fof(aresta_2_3, axiom, adj(v2, v3)).
-fof(aresta_3_4, axiom, adj(v3, v4)).
-fof(aresta_1_4, axiom, adj(v1, v4)).
-
-% Axioma de simetria para arestas não direcionadas
-fof(simetria, axiom, ![X, Y]: (adj(X, Y) => adj(Y, X))).
-
-% Anti-reflexividade
-fof(sem_auto_loops, axiom, ![X]: ~adj(X, X)).
-
-% Conjectura de detecção de triângulo
-fof(triangulo_existe, conjecture, 
-  ?[V1, V2, V3]: (
-    adj(V1, V2) & adj(V2, V3) & adj(V3, V1) &
-    V1 != V2 & V2 != V3 & V3 != V1
-  )
-).
-
-% Fim da geração de axiomas`;
+let tptpCode = '';
 
 export function renderPage2() {
   return `
@@ -88,10 +65,18 @@ export function initPage2() {
     output.style.display = 'block';
     output.textContent = '';
     
-    // Simulate typing effect
-    for (let i = 0; i < tptpCode.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 10));
-      output.textContent = tptpCode.substring(0, i + 1);
+    // Fetch the actual TPTP file content
+    try {
+      const response = await fetch('/artifacts/graph_problem.p');
+      tptpCode = await response.text();
+      
+      // Simulate typing effect
+      for (let i = 0; i < tptpCode.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+        output.textContent = tptpCode.substring(0, i + 1);
+      }
+    } catch (error) {
+      output.textContent = 'Erro ao carregar arquivo TPTP: ' + error.message;
     }
     
     isGenerating = false;
