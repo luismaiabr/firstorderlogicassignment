@@ -42,7 +42,8 @@ export function initPage5() {
       output.textContent = 'Enviando requisição para o servidor...\n';
       
       try {
-        const solveURL = `${serverConfig.baseURL}${serverConfig.solveEndpoint}`;
+        const baseURL = serverConfig.baseURL.replace(/\/$/, ''); // Remove trailing slash
+        const solveURL = `${baseURL}${serverConfig.solveEndpoint}`;
         const response = await fetch(solveURL);
         
         if (!response.ok) {
