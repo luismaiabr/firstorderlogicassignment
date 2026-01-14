@@ -1,3 +1,9 @@
+// Server configuration
+export const serverConfig = {
+  baseURL: window.__SERVER_CONFIG__?.baseURL || 'http://localhost:8000',
+  solveEndpoint: '/solve'
+};
+
 // Navigation sections configuration
 export const sections = [
   { number: 1, title: "Base Teórica", route: "/" },

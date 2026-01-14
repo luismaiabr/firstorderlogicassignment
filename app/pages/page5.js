@@ -2,6 +2,8 @@
  * Page 5: Final Considerations (Considerações Finais)
  */
 
+import { serverConfig } from '../config.js';
+
 export function renderPage5() {
   return `
     <div class="page-container">
@@ -42,47 +44,6 @@ export function renderPage5() {
 
 let isRunning = false;
 
-const vampireOutput = `% Vampire 4.8 (commit 1234abc em 01/12/2024)
-% Vinculado com Z3 4.12.0
-% Comando: vampire --mode casc --proof tptp --output_axiom_names on input.p
-
-% Status SZS: Teorema para input.p
-% Início da saída de prova SZS para input.p
-
-% Tempo decorrido: 0.018s
-% Memória usada [KB]: 2048
-% Opções usadas: ordenação de termos LPO, divisão avatar habilitada
-
-fof(f1, axiom, adj(v1, v2), file('input.p', aresta_1_2)).
-fof(f2, axiom, adj(v2, v3), file('input.p', aresta_2_3)).
-fof(f3, axiom, adj(v3, v1), file('input.p', aresta_3_1)).
-
-fof(f10, axiom, ![X,Y]: (adj(X,Y) => adj(Y,X)), file('input.p', simetria)).
-
-% Cláusulas derivadas
-cnf(c1, plain, adj(v1, v2), inference(fof_to_cnf,[],[f1])).
-cnf(c2, plain, adj(v2, v3), inference(fof_to_cnf,[],[f2])).
-cnf(c3, plain, adj(v3, v1), inference(fof_to_cnf,[],[f3])).
-
-% Detecção de triângulo
-cnf(c20, plain, adj(v1,v2) & adj(v2,v3) & adj(v3,v1), 
-    inference(resolution,[],[c1,c2,c3])).
-
-% Vértices distintos confirmados
-cnf(c21, plain, v1 != v2 & v2 != v3 & v3 != v1,
-    inference(inequality_resolution,[],[c20])).
-
-% REFUTAÇÃO ENCONTRADA
-cnf(c30, plain, $false, 
-    inference(triangle_detected,[],[c20,c21])).
-
-% Status SZS: Refutação para input.p
-% Fim da saída de prova SZS para input.p
-
-% Terminando com status: Refutação encontrada
-% Triângulo existe: [v1, v2, v3]
-% Prova verificada com ordenação de termos LPO`;
-
 export function initPage5() {
   const btn = document.getElementById('vampire-btn');
   const output = document.getElementById('vampire-output');
@@ -95,17 +56,54 @@ export function initPage5() {
       btn.disabled = true;
       btn.textContent = 'Executando Vampire...';
       output.style.display = 'block';
-      output.textContent = '';
+      output.textContent = 'Enviando requisição para o servidor...\n';
       
-      // Simulate typing effect in chunks
-      for (let i = 0; i < vampireOutput.length; i += 50) {
-        await new Promise(resolve => setTimeout(resolve, 50));
-        output.textContent = vampireOutput.substring(0, Math.min(i + 50, vampireOutput.length));
+      try {
+        const solveURL = `${serverConfig.baseURL}${serverConfig.solveEndpoint}`;
+        const response = await fetch(solveURL);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        // Primeiro, pega o texto da resposta
+        const responseText = await response.text();
+        output.textContent = '';
+        
+        // Tenta fazer parse como JSON
+        let data = null;
+        try {
+          data = JSON.parse(responseText);
+        } catch (jsonError) {
+          // Se não for JSON válido, exibe o texto diretamente
+          output.textContent = responseText;
+          return;
+        }
+        
+        // Se conseguiu fazer parse do JSON, exibe de forma estruturada
+        if (data.message) {
+          output.textContent = data.message + '\n\n';
+        }
+        
+        // Exibe a saída do Vampire
+        if (data.output) {
+          output.textContent += data.output;
+        } else if (data.result) {
+          output.textContent += data.result;
+        }
+        
+      } catch (error) {
+        output.textContent = `Erro ao conectar ao servidor: ${error.message}\n\n`;
+        output.textContent += `URL: ${serverConfig.baseURL}${serverConfig.solveEndpoint}\n\n`;
+        output.textContent += `Certifique-se de que:\n`;
+        output.textContent += `1. O servidor está rodando em ${serverConfig.baseURL}\n`;
+        output.textContent += `2. A rota ${serverConfig.solveEndpoint} está disponível\n`;
+        output.textContent += `3. Configure o endereço do servidor em app/config.js se necessário`;
+      } finally {
+        isRunning = false;
+        btn.disabled = false;
+        btn.textContent = 'Invocar Vampire';
       }
-      
-      isRunning = false;
-      btn.disabled = false;
-      btn.textContent = 'Invocar Vampire';
     });
   }
   

@@ -1,6 +1,9 @@
 {
-  "buildCommand": null,
+  "buildCommand": "echo 'Static site'",
   "outputDirectory": ".",
+  "env": {
+    "BASE_URL": "@base_url"
+  },
   "routes": [
     {
       "src": "/[^.]+",
