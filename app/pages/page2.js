@@ -70,11 +70,8 @@ export function initPage2() {
       const response = await fetch('/artifacts/graph_problem.p');
       tptpCode = await response.text();
       
-      // Simulate typing effect
-      for (let i = 0; i < tptpCode.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 5));
-        output.textContent = tptpCode.substring(0, i + 1);
-      }
+      // Display instantly
+      output.textContent = tptpCode;
     } catch (error) {
       output.textContent = 'Erro ao carregar arquivo TPTP: ' + error.message;
     }
