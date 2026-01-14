@@ -11,8 +11,9 @@ export const sections = [
   { number: 3, title: "Engenharia e Validação", route: "/3" },
   { number: 4, title: "Prova Automatizada (LPO)", route: "/4" },
   { number: 5, title: "Implementação", route: "/5" },
-  { number: 6, title: "Conclusão", route: "/6" },
-  { number: 7, title: "Artefatos", route: "/7" },
+  { number: 6, title: "Demonstração Visual", route: "/6" },
+  { number: 7, title: "Conclusão", route: "/7" },
+  { number: 8, title: "Artefatos", route: "/8" },
 ];
 
 // Artifacts files data

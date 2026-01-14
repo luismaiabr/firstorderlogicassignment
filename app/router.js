@@ -6,7 +6,8 @@ import {
   renderPage4, initPage4,
   renderPage5, initPage5,
   renderPage6, initPage6,
-  renderPage7, initPage7
+  renderPage7, initPage7,
+  renderPage8, initPage8
 } from './pages/index.js';
 
 /**
@@ -22,6 +23,7 @@ class Router {
       '/5': { render: renderPage5, init: initPage5 },
       '/6': { render: renderPage6, init: initPage6 },
       '/7': { render: renderPage7, init: initPage7 },
+      '/8': { render: renderPage8, init: initPage8 },
     };
     
     this.mainContent = null;

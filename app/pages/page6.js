@@ -1,74 +1,28 @@
 /**
- * Page 6: Conclusion (Conclusão)
+ * Page 6: Visual Demonstration (Demonstração Visual - Oráculo)
  */
 
 export function renderPage6() {
   return `
     <div class="page-container">
-      <h1>Conclusão</h1>
+      <h1>Demonstração Visual (Oráculo)</h1>
 
       <div class="card">
-        <h2>Resumo do Projeto</h2>
-        <div class="space-y-4 text-muted leading-relaxed">
-          <p>
-            Este projeto demonstra com sucesso a aplicação de prova automática de teoremas a problemas de teoria dos
-            grafos, especificamente a detecção de triângulos (ciclos C₃) em grafos não direcionados.
-          </p>
+        <h2>Visualização do Grafo e Ciclos</h2>
+        <p class="text-muted mb-4">
+          Navegue pelas diferentes visualizações do grafo para ver os ciclos detectados pelo algoritmo DFS.
+        </p>
 
-          <p>
-            Ao combinar processamento de grafos baseado em Python com o provador de teoremas Vampire, criamos um sistema
-            robusto que pode tanto verificar empiricamente quanto provar formalmente a existência ou ausência de ciclos
-            triangulares.
-          </p>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Desafios Principais</h2>
-        <div class="space-y-3">
-          <div class="muted-box">
-            <h3 class="mb-2">1. Tradução do Formato TPTP</h3>
-            <p class="text-sm text-muted">
-              Converter representações de grafos para axiomas de lógica de primeira ordem mantendo a correção semântica
-              e eficiência do provador.
-            </p>
-          </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">2. Otimização de Desempenho</h3>
-            <p class="text-sm text-muted">
-              Equilibrar a completude do oráculo DFS com o espaço de busca de prova explorado pelo Vampire.
-            </p>
-          </div>
-
-          <div class="muted-box">
-            <h3 class="mb-2">3. Verificação de Prova</h3>
-            <p class="text-sm text-muted">
-              Garantir que as provas baseadas em LPO do Vampire se alinhem com os resultados empíricos do oráculo de
-              validação Python.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Resultados</h2>
-        <div class="grid-2">
-          <div class="stat-card">
-            <div class="stat-value">100%</div>
-            <div class="stat-label">Precisão da Prova</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">&lt;20ms</div>
-            <div class="stat-label">Tempo Médio de Prova</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">50+</div>
-            <div class="stat-label">Grafos Testados</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">Zero</div>
-            <div class="stat-label">Falsos Positivos</div>
+        <div class="mb-6">
+          <h3 class="mb-3" id="graph-title">Grafo Normal</h3>
+          <div class="image-container" id="graph-container" style="text-align: center; position: relative; display: inline-block; width: 100%;">
+            <img id="graph-image" src="app/assets/graph_normal.png" alt="Grafo Normal" style="max-width: 100%; height: auto; border-radius: var(--radius); transition: opacity 0.3s ease; display: block;">
+            <button id="prev-graph" class="btn" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); padding: 0.75rem 1rem; background: rgba(23, 23, 23, 0.85); color: white; border: none; border-radius: 50%; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; backdrop-filter: blur(4px);" title="Anterior">
+              ←
+            </button>
+            <button id="next-graph" class="btn" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); padding: 0.75rem 1rem; background: rgba(23, 23, 23, 0.85); color: white; border: none; border-radius: 50%; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; backdrop-filter: blur(4px);" title="Próximo">
+              →
+            </button>
           </div>
         </div>
       </div>
@@ -77,5 +31,57 @@ export function renderPage6() {
 }
 
 export function initPage6() {
-  // No interactive elements on this page
+  // Image navigation
+  const graphImage = document.getElementById('graph-image');
+  const graphTitle = document.getElementById('graph-title');
+  const prevBtn = document.getElementById('prev-graph');
+  const nextBtn = document.getElementById('next-graph');
+  
+  if (!graphImage || !graphTitle || !prevBtn || !nextBtn) return;
+  
+  const graphs = [
+    { src: 'app/assets/graph_normal.png', title: 'Grafo Normal' },
+    { src: 'app/assets/graph_cycle_1.png', title: 'Ciclo 1 (Comprimento 3)' },
+    { src: 'app/assets/graph_cycle_2.png', title: 'Ciclo 2 (Comprimento 6)' },
+    { src: 'app/assets/graph_cycle_3.png', title: 'Ciclo 3 (Comprimento 5)' },
+    { src: 'app/assets/graph_cycle_4.png', title: 'Ciclo 4 (Comprimento 7)' },
+    { src: 'app/assets/graph_all_cycles.png', title: 'Todos os Ciclos' }
+  ];
+  
+  let currentIndex = 0;
+  
+  function updateGraph() {
+    graphImage.style.opacity = '0';
+    setTimeout(() => {
+      graphImage.src = graphs[currentIndex].src;
+      graphImage.alt = graphs[currentIndex].title;
+      graphTitle.textContent = graphs[currentIndex].title;
+      graphImage.style.opacity = '1';
+    }, 150);
+    
+    // Update button states
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === graphs.length - 1;
+    prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+    nextBtn.style.opacity = currentIndex === graphs.length - 1 ? '0.3' : '1';
+    prevBtn.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+    nextBtn.style.cursor = currentIndex === graphs.length - 1 ? 'not-allowed' : 'pointer';
+  }
+  
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateGraph();
+    }
+  });
+  
+  nextBtn.addEventListener('click', () => {
+    if (currentIndex < graphs.length - 1) {
+      currentIndex++;
+      updateGraph();
+    }
+  });
+  
+  // Initialize button states
+  updateGraph();
 }
