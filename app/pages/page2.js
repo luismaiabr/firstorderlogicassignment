@@ -68,7 +68,11 @@ export function initPage2() {
     // Fetch the actual TPTP file content
     try {
       const baseUrl = window.__SERVER_CONFIG__?.baseURL || '';
-      const response = await fetch(`${baseUrl}/artifacts/graph_problem.p`);
+      const response = await fetch(`${baseUrl}/artifacts/graph_problem.p`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      });
       tptpCode = await response.text();
       
       // Display instantly
