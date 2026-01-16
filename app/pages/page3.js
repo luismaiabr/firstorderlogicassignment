@@ -37,7 +37,7 @@ export function renderPage3() {
       <div class="card">
         <h2>Demonstração Interativa</h2>
         <p class="text-muted mb-4">
-          Clique no botão abaixo para gerar axiomas TPTP a partir de um grafo de exemplo:
+          Clique no botão abaixo para gerar o conteúdo do arquivo <strong>.p</strong> a partir de um script Python:
         </p>
 
         <button id="generate-btn" class="btn btn-primary mb-4">
