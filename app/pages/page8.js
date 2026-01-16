@@ -11,7 +11,11 @@ let artifactContents = {};
 // Load artifact files from backend
 async function loadArtifacts() {
   try {
-    const response = await fetch(`${serverConfig.baseURL}/files`);
+    const response = await fetch(`${serverConfig.baseURL}/files`, {
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      }
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
