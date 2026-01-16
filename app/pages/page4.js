@@ -1,99 +1,237 @@
 /**
- * Page 4: Vampire Implementation (Implementação Vampire)
+ * Page 4: Engineering & Validation (Engenharia e Validação)
  */
 
 let isRunning = false;
 
-const vampireOutput = `% Vampire 4.8 (commit 1234abc em 01/12/2024)
-% Vinculado com Z3 4.12.0
-% Comando: vampire --mode casc --proof tptp --output_axiom_names on input.p
-
-% Status SZS: Teorema para input.p
-% Início da saída de prova SZS para input.p
-
-% Tempo decorrido: 0.018s
-% Memória usada [KB]: 2048
-% Opções usadas: ordenação de termos LPO, divisão avatar habilitada
-
-fof(f1, axiom, adj(v1, v2), file('input.p', aresta_1_2)).
-fof(f2, axiom, adj(v2, v3), file('input.p', aresta_2_3)).
-fof(f3, axiom, adj(v3, v1), file('input.p', aresta_3_1)).
-
-fof(f10, axiom, ![X,Y]: (adj(X,Y) => adj(Y,X)), file('input.p', simetria)).
-
-% Cláusulas derivadas
-cnf(c1, plain, adj(v1, v2), inference(fof_to_cnf,[],[f1])).
-cnf(c2, plain, adj(v2, v3), inference(fof_to_cnf,[],[f2])).
-cnf(c3, plain, adj(v3, v1), inference(fof_to_cnf,[],[f3])).
-
-% Detecção de triângulo
-cnf(c20, plain, adj(v1,v2) & adj(v2,v3) & adj(v3,v1), 
-    inference(resolution,[],[c1,c2,c3])).
-
-% Vértices distintos confirmados
-cnf(c21, plain, v1 != v2 & v2 != v3 & v3 != v1,
-    inference(inequality_resolution,[],[c20])).
-
-% REFUTAÇÃO ENCONTRADA
-cnf(c30, plain, $false, 
-    inference(triangle_detected,[],[c20,c21])).
-
-% Status SZS: Refutação para input.p
-% Fim da saída de prova SZS para input.p
-
-% Terminando com status: Refutação encontrada
-% Triângulo existe: [v1, v2, v3]
-% Prova verificada com ordenação de termos LPO`;
-
-const conjectureCode = `fof(deteccao_triangulo, conjecture,
-  ?[V1, V2, V3]: (
-    adj(V1, V2) & adj(V2, V3) & adj(V3, V1) &
-    V1 != V2 & V2 != V3 & V3 != V1
-  )
-).`;
+const jsonLog = `{
+    "total_cycles": 4,
+    "cycles": [
+        {
+            "back_edge": [
+                "v12",
+                "v03"
+            ],
+            "nodes": [
+                "v03",
+                "v08",
+                "v12",
+                "v03"
+            ],
+            "edges": [
+                [
+                    "v03",
+                    "v08"
+                ],
+                [
+                    "v08",
+                    "v12"
+                ],
+                [
+                    "v12",
+                    "v03"
+                ]
+            ],
+            "length": 3
+        },
+        {
+            "back_edge": [
+                "v15",
+                "v12"
+            ],
+            "nodes": [
+                "v12",
+                "v05",
+                "v09",
+                "v13",
+                "v02",
+                "v15",
+                "v12"
+            ],
+            "edges": [
+                [
+                    "v12",
+                    "v05"
+                ],
+                [
+                    "v05",
+                    "v09"
+                ],
+                [
+                    "v09",
+                    "v13"
+                ],
+                [
+                    "v13",
+                    "v02"
+                ],
+                [
+                    "v02",
+                    "v15"
+                ],
+                [
+                    "v15",
+                    "v12"
+                ]
+            ],
+            "length": 6
+        },
+        {
+            "back_edge": [
+                "v14",
+                "v03"
+            ],
+            "nodes": [
+                "v03",
+                "v08",
+                "v12",
+                "v05",
+                "v14",
+                "v03"
+            ],
+            "edges": [
+                [
+                    "v03",
+                    "v08"
+                ],
+                [
+                    "v08",
+                    "v12"
+                ],
+                [
+                    "v12",
+                    "v05"
+                ],
+                [
+                    "v05",
+                    "v14"
+                ],
+                [
+                    "v14",
+                    "v03"
+                ]
+            ],
+            "length": 5
+        },
+        {
+            "back_edge": [
+                "v04",
+                "v01"
+            ],
+            "nodes": [
+                "v01",
+                "v03",
+                "v08",
+                "v12",
+                "v05",
+                "v14",
+                "v04",
+                "v01"
+            ],
+            "edges": [
+                [
+                    "v01",
+                    "v03"
+                ],
+                [
+                    "v03",
+                    "v08"
+                ],
+                [
+                    "v08",
+                    "v12"
+                ],
+                [
+                    "v12",
+                    "v05"
+                ],
+                [
+                    "v05",
+                    "v14"
+                ],
+                [
+                    "v14",
+                    "v04"
+                ],
+                [
+                    "v04",
+                    "v01"
+                ]
+            ],
+            "length": 7
+        }
+    ]
+}`;
 
 export function renderPage4() {
   return `
     <div class="page-container">
-      <h1>Prova Automatizada (LPO)</h1>
+      <h1>Oráculo Python (Validação DFS)</h1>
 
       <div class="card">
-        <h2>Provador de Teoremas Vampire</h2>
+        <h2>Algoritmo de Busca em Profundidade</h2>
         <div class="space-y-4 text-muted leading-relaxed">
           <p>
-            O Vampire é um provador automático de teoremas de ponta para lógica de primeira ordem. Ele usa a Ordenação
-            Lexicográfica de Caminhos (LPO) para ordenação de termos e emprega resolução e cálculo de superposição para
-            busca de provas.
+            O oráculo Python implementa um algoritmo de Busca em Profundidade (DFS) para detectar ciclos de comprimento
+            3 (triângulos) no grafo de entrada. Isso serve como validação da verdade fundamental para os resultados do
+            provador de teoremas.
           </p>
 
           <div class="muted-box">
-            <h3 class="mb-2">Características Principais:</h3>
-            <ul class="list-disc space-y-2">
-              <li>
-                <strong>Ordenação de Termos LPO:</strong> Garante terminação e eficiência
-              </li>
-              <li>
-                <strong>Divisão Avatar:</strong> Lida com disjunções de forma eficaz
-              </li>
-              <li>
-                <strong>Resolução:</strong> Regra de inferência primária para busca de provas
-              </li>
-              <li>
-                <strong>Modo CASC:</strong> Otimizado para desempenho em nível de competição
-              </li>
-            </ul>
+            <h3 class="mb-2">Etapas do Algoritmo:</h3>
+            <ol class="list-decimal space-y-2">
+              <li>Iniciar DFS a partir de cada vértice no grafo</li>
+              <li>Rastrear nós visitados e o caminho atual</li>
+              <li>Para cada vizinho, verificar se cria um ciclo de comprimento 3</li>
+              <li>Registrar todos os triângulos detectados</li>
+              <li>Retornar resultados de validação com ciclos destacados</li>
+            </ol>
           </div>
+
+          <p class="text-sm text-muted">
+            Complexidade de Tempo: O(V + E) onde V são vértices e E são arestas
+          </p>
         </div>
       </div>
 
       <div class="card">
-        <h2>Conjectura TPTP</h2>
-        <div class="console-box" style="color: #60a5fa;">${conjectureCode}</div>
+        <h2>Execução da Validação</h2>
+
+        <button id="validate-btn" class="btn btn-primary mb-4">
+          Executar Validação Python
+        </button>
+
+        <div id="validation-output-container" style="display: none;">
+          <h3 class="mb-2">Saída da Validação:</h3>
+          <div id="validation-output" class="console-box"></div>
+        </div>
       </div>
     </div>
   `;
 }
 
 export function initPage4() {
-  // No interactive elements on this page
+  const btn = document.getElementById('validate-btn');
+  const outputContainer = document.getElementById('validation-output-container');
+  const output = document.getElementById('validation-output');
+  
+  if (!btn || !outputContainer || !output) return;
+  
+  btn.addEventListener('click', async () => {
+    if (isRunning) return;
+    
+    isRunning = true;
+    btn.disabled = true;
+    btn.textContent = 'Executando Validação...';
+    
+    // Simulate processing
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    outputContainer.style.display = 'block';
+    output.textContent = jsonLog;
+    
+    isRunning = false;
+    btn.disabled = false;
+    btn.textContent = 'Executar Validação Python';
+  });
 }

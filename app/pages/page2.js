@@ -1,88 +1,114 @@
 /**
- * Page 2: Axiom Generator (Gerador de Axiomas)
+ * Page 2: Vampire Implementation (Implementação Vampire)
  */
 
-let isGenerating = false;
-let tptpCode = '';
+let isRunning = false;
+
+const vampireOutput = `% Vampire 4.8 (commit 1234abc em 01/12/2024)
+% Vinculado com Z3 4.12.0
+% Comando: vampire --mode casc --proof tptp --output_axiom_names on input.p
+
+% Status SZS: Teorema para input.p
+% Início da saída de prova SZS para input.p
+
+% Tempo decorrido: 0.018s
+% Memória usada [KB]: 2048
+% Opções usadas: ordenação de termos LPO, divisão avatar habilitada
+
+fof(f1, axiom, adj(v1, v2), file('input.p', aresta_1_2)).
+fof(f2, axiom, adj(v2, v3), file('input.p', aresta_2_3)).
+fof(f3, axiom, adj(v3, v1), file('input.p', aresta_3_1)).
+
+fof(f10, axiom, ![X,Y]: (adj(X,Y) => adj(Y,X)), file('input.p', simetria)).
+
+% Cláusulas derivadas
+cnf(c1, plain, adj(v1, v2), inference(fof_to_cnf,[],[f1])).
+cnf(c2, plain, adj(v2, v3), inference(fof_to_cnf,[],[f2])).
+cnf(c3, plain, adj(v3, v1), inference(fof_to_cnf,[],[f3])).
+
+% Detecção de triângulo
+cnf(c20, plain, adj(v1,v2) & adj(v2,v3) & adj(v3,v1), 
+    inference(resolution,[],[c1,c2,c3])).
+
+% Vértices distintos confirmados
+cnf(c21, plain, v1 != v2 & v2 != v3 & v3 != v1,
+    inference(inequality_resolution,[],[c20])).
+
+% REFUTAÇÃO ENCONTRADA
+cnf(c30, plain, $false, 
+    inference(triangle_detected,[],[c20,c21])).
+
+% Status SZS: Refutação para input.p
+% Fim da saída de prova SZS para input.p
+
+% Terminando com status: Refutação encontrada
+% Triângulo existe: [v1, v2, v3]
+% Prova verificada com ordenação de termos LPO`;
+
+let solutionCode = '';
 
 export function renderPage2() {
   return `
     <div class="page-container">
-      <h1>Tradução de JSON para TPTP</h1>
+      <h1>Prova Automatizada (LPO)</h1>
 
       <div class="card">
-        <h2>Gerador de Axiomas em Python</h2>
+        <h2>Provador de Teoremas Vampire</h2>
         <div class="space-y-4 text-muted leading-relaxed">
           <p>
-            Nosso script Python converte dados de grafos do formato JSON para o formato TPTP (Thousands of Problems for
-            Theorem Provers), que pode ser consumido por provadores automáticos de teoremas como o Vampire.
+            O Vampire é um provador automático de teoremas de ponta para lógica de primeira ordem. Ele usa a Ordenação
+            Lexicográfica de Caminhos (LPO) para ordenação de termos e emprega resolução e cálculo de superposição para
+            busca de provas.
           </p>
 
           <div class="muted-box">
-            <h3 class="mb-2">Processo de Tradução:</h3>
+            <h3 class="mb-2">Características Principais:</h3>
             <ul class="list-disc space-y-2">
-              <li>Analisar representação de grafo em JSON (nós e arestas)</li>
               <li>
-                Gerar axiomas de arestas como predicados
-                <code class="font-mono">adj(v1, v2)</code>
+                <strong>Ordenação de Termos LPO:</strong> Garante terminação e eficiência
               </li>
-              <li>Adicionar axiomas estruturais (simetria, anti-reflexividade)</li>
-              <li>Formular a conjectura de detecção de triângulos</li>
-              <li>Gerar sintaxe TPTP válida</li>
+              <li>
+                <strong>Divisão Avatar:</strong> Lida com disjunções de forma eficaz
+              </li>
+              <li>
+                <strong>Resolução:</strong> Regra de inferência primária para busca de provas
+              </li>
+              <li>
+                <strong>Modo CASC:</strong> Otimizado para desempenho em nível de competição
+              </li>
             </ul>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <h2>Demonstração Interativa</h2>
-        <p class="text-muted mb-4">
-          Clique no botão abaixo para gerar axiomas TPTP a partir de um grafo de exemplo:
-        </p>
-
-        <button id="generate-btn" class="btn btn-primary mb-4">
-          Gerar Axiomas
-        </button>
-
-        <div id="axiom-output" class="console-box" style="display: none;"></div>
+        <h2>Conjectura TPTP</h2>
+        <div id="solution-output" class="console-box" style="color: #60a5fa;"></div>
       </div>
     </div>
   `;
 }
 
 export function initPage2() {
-  const btn = document.getElementById('generate-btn');
-  const output = document.getElementById('axiom-output');
+  const outputContainer = document.getElementById('solution-output');
   
-  if (!btn || !output) return;
+  if (!outputContainer) return;
   
-  btn.addEventListener('click', async () => {
-    if (isGenerating) return;
-    
-    isGenerating = true;
-    btn.disabled = true;
-    btn.textContent = 'Gerando...';
-    output.style.display = 'block';
-    output.textContent = '';
-    
-    // Fetch the actual TPTP file content
+  // Fetch the solution.tptp file content on page load
+  const loadSolution = async () => {
     try {
-      const baseUrl = window.__SERVER_CONFIG__?.baseURL || '';
-      const response = await fetch(`${baseUrl}/artifacts/graph_problem.p`, {
+      const baseUrl = window.__SERVER_CONFIG__?.baseURL || 'https://ununique-ladawn-semifurnished.ngrok-free.dev';
+      const response = await fetch(`${baseUrl}/artifacts/solution.tptp`, {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }
       });
-      tptpCode = await response.text();
-      
-      // Display instantly
-      output.textContent = tptpCode;
+      solutionCode = await response.text();
+      outputContainer.textContent = solutionCode;
     } catch (error) {
-      output.textContent = 'Erro ao carregar arquivo TPTP: ' + error.message;
+      outputContainer.textContent = 'Erro ao carregar arquivo solution.tptp: ' + error.message;
     }
-    
-    isGenerating = false;
-    btn.disabled = false;
-    btn.textContent = 'Gerar Axiomas';
-  });
+  };
+  
+  loadSolution();
 }

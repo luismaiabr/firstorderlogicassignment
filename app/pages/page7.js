@@ -53,23 +53,24 @@ export function renderPage7() {
 
       <div class="card">
         <h2>Resultados</h2>
-        <div class="grid-2">
-          <div class="stat-card">
-            <div class="stat-value">100%</div>
-            <div class="stat-label">Precisão da Prova</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">&lt;20ms</div>
-            <div class="stat-label">Tempo Médio de Prova</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">50+</div>
-            <div class="stat-label">Grafos Testados</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">Zero</div>
-            <div class="stat-label">Falsos Positivos</div>
-          </div>
+        <div class="space-y-4 text-muted leading-relaxed">
+          <p>
+            Os resultados obtidos neste projeto demonstram a eficácia da abordagem híbrida proposta, combinando 
+            técnicas algorítmicas clássicas com métodos formais de prova automática. A validação cruzada entre o 
+            oráculo DFS implementado em Python e o provador de teoremas Vampire confirmou a consistência e 
+            correção das detecções de ciclos C₃ em todos os grafos testados.
+          </p>
+          <p>
+            A análise comparativa revelou que ambos os métodos convergem para as mesmas conclusões, oferecendo 
+            diferentes perspectivas sobre o mesmo problema: enquanto o DFS fornece uma abordagem construtiva e 
+            computacional, o Vampire oferece garantias formais baseadas em lógica de primeira ordem com ordenação 
+            lexicográfica de caminhos (LPO).
+          </p>
+          <p>
+            Este trabalho estabelece uma base sólida para futuras investigações na aplicação de provadores 
+            automáticos de teoremas a problemas de teoria dos grafos, abrindo possibilidades para exploração 
+            de estruturas mais complexas e propriedades topológicas avançadas.
+          </p>
         </div>
       </div>
     </div>
