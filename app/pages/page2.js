@@ -83,19 +83,36 @@ export function renderPage2() {
 
       <div class="card">
         <h2>Conjectura TPTP</h2>
-        <div id="solution-output" class="console-box" style="color: #60a5fa;"></div>
+        <p class="text-muted mb-4">
+          Clique no botão abaixo para carregar a solução TPTP do provador:
+        </p>
+
+        <button id="load-solution-btn" class="btn btn-primary mb-4">
+          Carregar Solução
+        </button>
+
+        <div id="solution-output" class="console-box" style="display: none;"></div>
       </div>
     </div>
   `;
 }
 
 export function initPage2() {
-  const outputContainer = document.getElementById('solution-output');
+  const btn = document.getElementById('load-solution-btn');
+  const output = document.getElementById('solution-output');
   
-  if (!outputContainer) return;
+  if (!btn || !output) return;
   
-  // Fetch the solution.tptp file content on page load
-  const loadSolution = async () => {
+  btn.addEventListener('click', async () => {
+    if (isRunning) return;
+    
+    isRunning = true;
+    btn.disabled = true;
+    btn.textContent = 'Carregando...';
+    output.style.display = 'block';
+    output.textContent = '';
+    
+    // Fetch the solution.tptp file content
     try {
       const baseUrl = window.__SERVER_CONFIG__?.baseURL || 'https://ununique-ladawn-semifurnished.ngrok-free.dev';
       const response = await fetch(`${baseUrl}/artifacts/solution.tptp`, {
@@ -104,11 +121,15 @@ export function initPage2() {
         }
       });
       solutionCode = await response.text();
-      outputContainer.textContent = solutionCode;
+      
+      // Display instantly
+      output.textContent = solutionCode;
     } catch (error) {
-      outputContainer.textContent = 'Erro ao carregar arquivo solution.tptp: ' + error.message;
+      output.textContent = 'Erro ao carregar arquivo solution.tptp: ' + error.message;
     }
-  };
-  
-  loadSolution();
+    
+    isRunning = false;
+    btn.disabled = false;
+    btn.textContent = 'Carregar Solução';
+  });
 }
