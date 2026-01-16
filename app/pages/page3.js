@@ -8,14 +8,13 @@ let tptpCode = '';
 export function renderPage3() {
   return `
     <div class="page-container">
-      <h1>Tradução de JSON para TPTP</h1>
+      <h1>Tradução de JSON para .p</h1>
 
       <div class="card">
         <h2>Gerador de Axiomas em Python</h2>
         <div class="space-y-4 text-muted leading-relaxed">
           <p>
-            Nosso script Python converte dados de grafos do formato JSON para o formato TPTP (Thousands of Problems for
-            Theorem Provers), que pode ser consumido por provadores automáticos de teoremas como o Vampire.
+            Nosso script Python converte dados de grafos do formato JSON para o formato .p que é referenciado pelo .tptp, fornecendo entrada para o provador de teoremas Vampire.
           </p>
 
           <div class="muted-box">

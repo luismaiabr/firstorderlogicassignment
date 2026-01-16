@@ -1,8 +1,8 @@
 import { createSidebar, renderNavLinks } from './sidebar.js';
 import { 
   renderPage1, 
-  renderPage2, initPage2,
-  renderPage3, initPage3,
+  renderPage3 as renderPage2, initPage3 as initPage2,
+  renderPage2 as renderPage3, initPage2 as initPage3,
   renderPage4, initPage4,
   renderPage5, initPage5,
   renderPage6, initPage6,
