@@ -2,22 +2,45 @@
  * Page 8: Artifacts (Artefatos)
  */
 
-import { artifactFiles } from '../config.js';
+import { serverConfig } from '../config.js';
 
-// Store artifact contents for download
+// Store artifact files metadata and contents
+let artifactFiles = [];
 let artifactContents = {};
 
-// Load artifact files directly from artifacts folder
+// Load artifact files from backend
 async function loadArtifacts() {
-  for (const file of artifactFiles) {
-    try {
-      const response = await fetch(`artifacts/${file.name}`);
-      if (response.ok) {
-        artifactContents[file.name] = await response.text();
-      }
-    } catch (error) {
-      console.error(`Erro ao carregar ${file.name}:`, error);
+  try {
+    const response = await fetch(`${serverConfig.baseURL}/files`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    const data = await response.json();
+    
+    // Store files metadata from FilesResponse
+    artifactFiles = data.files || [];
+    
+    // Load content for each file
+    for (const file of artifactFiles) {
+      try {
+        // If content is already included in the response, use it
+        if (file.content) {
+          artifactContents[file.name] = file.content;
+        } else {
+          // Otherwise, fetch from artifacts folder
+          const fileResponse = await fetch(`artifacts/${file.name}`);
+          if (fileResponse.ok) {
+            artifactContents[file.name] = await fileResponse.text();
+          }
+        }
+      } catch (error) {
+        console.error(`Erro ao carregar ${file.name}:`, error);
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao buscar lista de arquivos do backend:', error);
+    // Fallback to empty array if backend is unavailable
+    artifactFiles = [];
   }
 }
 
@@ -57,32 +80,12 @@ export function renderPage8() {
         </p>
 
         <div class="file-list" id="file-list">
-          ${artifactFiles.map((file, index) => `
-            <div class="file-item" data-file-index="${index}">
-              <div class="file-info" style="flex: 1; cursor: pointer;" data-file-expand="${index}">
-                <div class="file-icon">${file.extension}</div>
-                <div style="flex: 1;">
-                  <div class="file-name">${file.name}</div>
-                  <div class="file-size">${file.description}</div>
-                  <div class="file-detailed-description" id="file-desc-${index}" style="display: none; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.875rem; line-height: 1.5;">
-                    ${file.detailedDescription}
-                  </div>
-                </div>
-                <svg class="expand-icon" id="expand-icon-${index}" style="width: 1.25rem; height: 1.25rem; margin-left: 1rem; transition: transform 0.2s; color: var(--muted-foreground);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </div>
-              <button class="btn-download" data-file="${file.name}" style="margin-left: 1rem;">
-                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                </svg>
-                Download
-              </button>
-            </div>
-          `).join('')}
+          <div class="text-center text-muted" style="padding: 2rem;">
+            Carregando arquivos...
+          </div>
         </div>
 
-        <div class="download-all-container">
+        <div class="download-all-container" id="download-all-container" style="display: none;">
           <button id="download-all-btn" class="btn btn-primary" style="width: 100%;">
             <svg class="icon mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
@@ -114,10 +117,58 @@ export function renderPage8() {
   `;
 }
 
-export async function initPage8() {
-  // Load artifacts first
-  await loadArtifacts();
+// Render the file list dynamically
+function renderFileList() {
+  const fileListContainer = document.getElementById('file-list');
+  const downloadAllContainer = document.getElementById('download-all-container');
   
+  if (!fileListContainer) return;
+  
+  if (artifactFiles.length === 0) {
+    fileListContainer.innerHTML = `
+      <div class="text-center text-muted" style="padding: 2rem;">
+        Nenhum arquivo disponível no momento.
+      </div>
+    `;
+    return;
+  }
+  
+  // Render files
+  fileListContainer.innerHTML = artifactFiles.map((file, index) => `
+    <div class="file-item" data-file-index="${index}">
+      <div class="file-info" style="flex: 1; cursor: pointer;" data-file-expand="${index}">
+        <div class="file-icon">${file.extension}</div>
+        <div style="flex: 1;">
+          <div class="file-name">${file.name}</div>
+          <div class="file-size">${file.description}</div>
+          <div class="file-detailed-description" id="file-desc-${index}" style="display: none; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.875rem; line-height: 1.5;">
+            ${file.detailedDescription || file.detailed_description || ''}
+          </div>
+        </div>
+        <svg class="expand-icon" id="expand-icon-${index}" style="width: 1.25rem; height: 1.25rem; margin-left: 1rem; transition: transform 0.2s; color: var(--muted-foreground);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+      <button class="btn-download" data-file="${file.name}" style="margin-left: 1rem;">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        Download
+      </button>
+    </div>
+  `).join('');
+  
+  // Show download all button
+  if (downloadAllContainer) {
+    downloadAllContainer.style.display = 'block';
+  }
+  
+  // Re-attach event listeners after rendering
+  attachFileListeners();
+}
+
+// Attach event listeners to file list elements
+function attachFileListeners() {
   // Set up expand/collapse for file descriptions
   const expandBtns = document.querySelectorAll('[data-file-expand]');
   expandBtns.forEach(btn => {
@@ -148,6 +199,14 @@ export async function initPage8() {
       }
     });
   });
+}
+
+export async function initPage8() {
+  // Load artifacts from backend
+  await loadArtifacts();
+  
+  // Render the file list
+  renderFileList();
   
   // Set up download all button
   const downloadAllBtn = document.getElementById('download-all-btn');
