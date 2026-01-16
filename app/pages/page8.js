@@ -31,8 +31,12 @@ async function loadArtifacts() {
         if (file.content) {
           artifactContents[file.name] = file.content;
         } else {
-          // Otherwise, fetch from artifacts folder
-          const fileResponse = await fetch(`artifacts/${file.name}`);
+          // Otherwise, fetch from backend artifacts endpoint
+          const fileResponse = await fetch(`${serverConfig.baseURL}/artifacts/${file.name}`, {
+            headers: {
+              'ngrok-skip-browser-warning': 'true'
+            }
+          });
           if (fileResponse.ok) {
             artifactContents[file.name] = await fileResponse.text();
           }
