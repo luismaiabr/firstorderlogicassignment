@@ -106,14 +106,14 @@ export function renderPage8() {
       <div class="card">
         <h2>Desenvolvedores Responsáveis</h2>
         <div class="space-y-3">
-          <div class="muted-box" style="padding: 1rem; display: flex; align-items: center;">
-            <img src="/app/photos/Maria.png" alt="Maria Rafaela Costa" style="width: 2.5rem; height: 2.5rem; border-radius: 50%; margin-right: 0.75rem; object-fit: cover; border: 2px solid var(--primary);" />
-            <span style="font-size: 1rem; font-weight: 500;">Maria Rafaela Costa</span>
+          <div class="muted-box" style="padding: 1.25rem; display: flex; align-items: center;">
+            <img src="/app/photos/Maria.png" alt="Maria Rafaela Costa" style="width: 3.125rem; height: 3.125rem; border-radius: 50%; margin-right: 0.9375rem; object-fit: cover; border: 2px solid var(--primary);" />
+            <span style="font-size: 1.25rem; font-weight: 500;">Maria Rafaela Costa</span>
           </div>
           
-          <div class="muted-box" style="padding: 1rem; display: flex; align-items: center;">
-            <img src="/app/photos/Luis.png" alt="Luis Antônio Maia Sombra" style="width: 2.5rem; height: 2.5rem; border-radius: 50%; margin-right: 0.75rem; object-fit: cover; border: 2px solid var(--primary);" />
-            <span style="font-size: 1rem; font-weight: 500;">Luis Antônio Maia Sombra</span>
+          <div class="muted-box" style="padding: 1.25rem; display: flex; align-items: center;">
+            <img src="/app/photos/Luis.png" alt="Luis Antônio Maia Sombra" style="width: 3.125rem; height: 3.125rem; border-radius: 50%; margin-right: 0.9375rem; object-fit: cover; border: 2px solid var(--primary);" />
+            <span style="font-size: 1.25rem; font-weight: 500;">Luis Antônio Maia Sombra</span>
           </div>
         </div>
       </div>
