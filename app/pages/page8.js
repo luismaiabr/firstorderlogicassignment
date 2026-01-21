@@ -67,12 +67,30 @@ function downloadFile(filename, content) {
 
 // Download all files as a zip (using simple approach without external library)
 async function downloadAllFiles() {
-  // Since we can't use JSZip without external library, download each file individually
-  for (const [filename, content] of Object.entries(artifactContents)) {
-    if (content) {
-      downloadFile(filename, content);
-      await new Promise(resolve => setTimeout(resolve, 300)); // Small delay between downloads
+  // Download the everything.zip file from backend
+  try {
+    const response = await fetch(`${serverConfig.baseURL}/artifacts/everything.zip`, {
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'everything.zip';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error downloading zip file:', error);
+    alert('Erro ao baixar o arquivo. Por favor, tente novamente.');
   }
 }
 
@@ -128,7 +146,10 @@ function renderFileList() {
   
   if (!fileListContainer) return;
   
-  if (artifactFiles.length === 0) {
+  // Filter out everything.zip from the list
+  const filteredFiles = artifactFiles.filter(file => file.name !== 'everything.zip');
+  
+  if (filteredFiles.length === 0) {
     fileListContainer.innerHTML = `
       <div class="text-center text-muted" style="padding: 2rem;">
         Nenhum arquivo disponível no momento.
@@ -138,7 +159,7 @@ function renderFileList() {
   }
   
   // Render files
-  fileListContainer.innerHTML = artifactFiles.map((file, index) => `
+  fileListContainer.innerHTML = filteredFiles.map((file, index) => `
     <div class="file-item" data-file-index="${index}">
       <div class="file-info" style="flex: 1; cursor: pointer;" data-file-expand="${index}">
         <div class="file-icon">${file.extension}</div>
