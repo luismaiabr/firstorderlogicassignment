@@ -27,7 +27,7 @@ export function renderPage3() {
               </li>
               <li>Adicionar axiomas estruturais (simetria, anti-reflexividade)</li>
               <li>Formular a conjectura de detecção de triângulos</li>
-              <li>Gerar sintaxe TPTP válida</li>
+              <li>Gerar sintaxe <strong>.p</strong> válida</li>
             </ul>
           </div>
         </div>

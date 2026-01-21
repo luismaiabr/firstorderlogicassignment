@@ -68,13 +68,7 @@ export function renderPage2() {
                 <strong>Ordenação de Termos LPO:</strong> Garante terminação e eficiência
               </li>
               <li>
-                <strong>Divisão Avatar:</strong> Lida com disjunções de forma eficaz
-              </li>
-              <li>
                 <strong>Resolução:</strong> Regra de inferência primária para busca de provas
-              </li>
-              <li>
-                <strong>Modo CASC:</strong> Otimizado para desempenho em nível de competição
               </li>
             </ul>
           </div>
